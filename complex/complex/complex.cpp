@@ -20,7 +20,7 @@ public:
 	}
 	Complex operator+(Complex n2)
 	{
-		_R = _R+ n2._R;
+		_R = _R + n2._R;
 		_Im = _Im + n2._Im;
 		return *this;
 	}
@@ -29,6 +29,25 @@ public:
 		_R = n2._R;
 		_Im = n2._Im;
 		return *this;
+	}
+	int comp(Complex n1, Complex n2)
+	{
+		T M1;
+		T M2;
+		M1 = sqrt(n1._R + n1._Im);
+		M2 = sqrt(n2._R + n2._Im);
+		if (M1 == M2) 
+		{
+			return 0;
+		}
+		else if (M1 > M2)
+		{
+			return 1;
+		}
+		else
+		{
+			return 2;
+		}
 	}
 	
 };
@@ -41,6 +60,7 @@ int main()
 	num2.print();
 	num3 = num1 + num2;
 	num3.print();
+	//comp(num1, num2);
     return 0;
 }
 
