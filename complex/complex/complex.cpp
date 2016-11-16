@@ -30,10 +30,10 @@ public:
 		_Im = n2._Im;
 		return *this;
 	}
-	int comp(Complex n1, Complex n2)
+	static int comp(Complex n1, Complex n2) //сравнение комплексных чисел по модулю
 	{
-		T M1;
-		T M2;
+		double M1; //модуль первого числа
+		double M2; //модуль второго числа
 		M1 = sqrt(n1._R + n1._Im);
 		M2 = sqrt(n2._R + n2._Im);
 		if (M1 == M2) 
@@ -53,6 +53,7 @@ public:
 };
 int main()
 {
+	int min;
 	Complex <int> num1(12,15);
 	Complex <int> num2(15,10);
 	Complex <int> num3(0,0);
@@ -60,7 +61,8 @@ int main()
 	num2.print();
 	num3 = num1 + num2;
 	num3.print();
-	//comp(num1, num2);
+	min = Complex<int>::comp(num1,num2);
+	cout << min << endl;
     return 0;
 }
 
