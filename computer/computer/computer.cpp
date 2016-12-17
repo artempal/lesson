@@ -1,4 +1,4 @@
-// computer.cpp: определяет точку входа для консольного приложения.
+п»ї// computer.cpp: РѕРїСЂРµРґРµР»СЏРµС‚ С‚РѕС‡РєСѓ РІС…РѕРґР° РґР»СЏ РєРѕРЅСЃРѕР»СЊРЅРѕРіРѕ РїСЂРёР»РѕР¶РµРЅРёСЏ.
 //
 
 #include "stdafx.h"
@@ -19,9 +19,9 @@ public:
 	}
 	virtual void info()
 	{
-		cout << "Название компьютера: " << _name << endl;
-		cout << "Оперативная память: " << _ddr << endl;
-		cout << "Тип видеокрты: " << _video << endl;
+		cout << "РќР°Р·РІР°РЅРёРµ РєРѕРјРїСЊСЋС‚РµСЂР°: " << _name << endl;
+		cout << "РћРїРµСЂР°С‚РёРІРЅР°СЏ РїР°РјСЏС‚СЊ: " << _ddr << endl;
+		cout << "РўРёРї РІРёРґРµРѕРєСЂС‚С‹: " << _video << endl;
 	}
 };
 
@@ -36,9 +36,9 @@ public:
 	}
 	virtual void info()
 	{
-		cout << "Количество ядер: " << _core << endl;
-		cout << "Количество каналов связи: " << _channel << endl;
-		cout << "Особенности: " << _info << endl;
+		cout << "РљРѕР»РёС‡РµСЃС‚РІРѕ СЏРґРµСЂ: " << _core << endl;
+		cout << "РљРѕР»РёС‡РµСЃС‚РІРѕ РєР°РЅР°Р»РѕРІ СЃРІСЏР·Рё: " << _channel << endl;
+		cout << "РћСЃРѕР±РµРЅРЅРѕСЃС‚Рё: " << _info << endl;
 	}
 };
 class PC: public Computer {
@@ -49,6 +49,15 @@ public:
 	PC(string name, int ddr, string video, bool sound, bool sound_card) : Computer(name, ddr, video), _sound(sound), _sound_card(sound_card)
 	{
 	}
+	void info()
+	{
+		cout << "РќР°Р·РІР°РЅРёРµ РєРѕРјРїСЊСЋС‚РµСЂР°: " << _name << endl;
+		cout << "РћРїРµСЂР°С‚РёРІРЅР°СЏ РїР°РјСЏС‚СЊ: " << _ddr << endl;
+		cout << "РўРёРї РІРёРґРµРѕРєСЂС‚С‹: " << _video << endl;
+		cout << "Р—РІСѓРє: "; _sound ? cout << "РґР°" : cout << "РЅРµС‚"; cout << endl;
+		cout << "Р—РІСѓРєРѕРІР°СЏ РєР°СЂС‚Р°: "; _sound_card ? cout << "РґР°" : cout << "РЅРµС‚"; cout << endl;
+	}
+
 };
 class Laptop : public Computer {
 protected:
@@ -59,6 +68,16 @@ public:
 	Laptop(string name, int ddr, string video, int size, int battery, double weight) :
 		Computer(name, ddr, video), _size(size), _battery(battery), _weight(weight)
 	{
+	}
+	void info()
+	{
+		cout << "РќР°Р·РІР°РЅРёРµ РєРѕРјРїСЊСЋС‚РµСЂР°: " << _name << endl;
+		cout << "РћРїРµСЂР°С‚РёРІРЅР°СЏ РїР°РјСЏС‚СЊ: " << _ddr << "Р“Р±" << endl;
+		cout << "РўРёРї РІРёРґРµРѕРєСЂС‚С‹: " << _video << endl;
+		cout << "Р”РёСЃРїР»РµР№: " << _size << "`" << endl;
+		cout << "Р•РјРєРѕСЃС‚СЊ Р°РєРєР°РјСѓР»СЏС‚РѕСЂР°:" << _battery << " РјРђС‡" << endl;
+		cout << "Р’РµСЃ:" << _weight << " РєРі" << endl;
+		
 	}
 
 };
@@ -74,14 +93,14 @@ public:
 	}
 	void info()
 	{
-		cout << "Название компьютера: " << _name << endl;
-		cout << "Оперативная память: " << _ddr << "Гб" << endl;
-		cout << "Тип видеокрты: " << _video << endl;
-		cout << "Количество ядер: " << _core << endl;
-		cout << "Количество каналов связи: " << _channel << endl;
-		cout << "Особенности: " << _info << endl;
-		cout << "Подключен ли интернет: "; _net ? cout << "да" : cout << "нет"; cout << endl;
-		cout << "Операционная система: " << _os << endl;
+		cout << "РќР°Р·РІР°РЅРёРµ РєРѕРјРїСЊСЋС‚РµСЂР°: " << _name << endl;
+		cout << "РћРїРµСЂР°С‚РёРІРЅР°СЏ РїР°РјСЏС‚СЊ: " << _ddr << "Р“Р±" << endl;
+		cout << "РўРёРї РІРёРґРµРѕРєСЂС‚С‹: " << _video << endl;
+		cout << "РљРѕР»РёС‡РµСЃС‚РІРѕ СЏРґРµСЂ: " << _core << endl;
+		cout << "РљРѕР»РёС‡РµСЃС‚РІРѕ РєР°РЅР°Р»РѕРІ СЃРІСЏР·Рё: " << _channel << endl;
+		cout << "РћСЃРѕР±РµРЅРЅРѕСЃС‚Рё: " << _info << endl;
+		cout << "РџРѕРґРєР»СЋС‡РµРЅ Р»Рё РёРЅС‚РµСЂРЅРµС‚: "; _net ? cout << "РґР°" : cout << "РЅРµС‚"; cout << endl;
+		cout << "РћРїРµСЂР°С†РёРѕРЅРЅР°СЏ СЃРёСЃС‚РµРјР°: " << _os << endl;
 
 	}
 };
@@ -89,7 +108,18 @@ public:
 int _tmain(int argc, _TCHAR* argv[])
 {
 	setlocale(LC_ALL, "rus");
-	Mobile_server ms = Mobile_server("Artem_server", 16, "Nvidea", 14, 10500, 5.5, 4, 3, "Установлен Nginx", 1, "Linux");
+	cout << "---------------------" << endl;
+	cout << "РџРµСЂРµРЅРѕСЃРЅРѕР№ СЃРµСЂРІРµСЂ" << endl;
+	Mobile_server ms = Mobile_server("Artem_server", 16, "NVIDIA GeForce GTX 950", 14, 10500, 5.5, 4, 3, "РЈСЃС‚Р°РЅРѕРІР»РµРЅ Nginx", 1, "Linux");
 	ms.info();
+	cout << "---------------------" << endl;
+	cout << "РќРѕСѓС‚Р±СѓРє" << endl;
+	Laptop lt = Laptop("Artem_Laptop", 2, "NVIDIA GeForce GTX 1050 Ti", 15, 6500, 2.8);
+	lt.info();
+	cout << "---------------------" << endl;
+	cout << "РљРѕРјРїСЊСЋС‚РµСЂ" << endl;
+	Computer cp = Computer("My computer", 8, "AMD Radeon RX 470");
+	cp.info();
+	cout << "---------------------" << endl;
 	return 0;
 }
