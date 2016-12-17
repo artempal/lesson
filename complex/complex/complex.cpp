@@ -78,7 +78,8 @@ public:
 	}
 	/* КОНЕЦ - Перегрузки операторов */
 
-	//friend ostream& operator<<(ostream&, T Complex&);
+	friend ostream& operator<< <T>(ostream& os, Complex<T>& obj);
+	friend istream& operator>> <T>(istream& os, Complex<T>& obj);
 	static int comp(Complex n1, Complex n2) //сравнение комплексных чисел по модулю
 	{
 		double M1; //модуль первого числа
@@ -101,11 +102,21 @@ public:
 	}
 	
 };
-/*ostream& operator<<(ostream& a, T Complex *b)
+template <class T>
+ostream& operator<< (ostream& os, Complex<T>& obj)
 {
-	
-} 
-*/
+	os << obj._R << "+-" << obj._Im << "i" << endl;
+	return os;
+}
+template <class T>
+istream& operator>> (istream& os, Complex<T>& obj)
+{
+	cout << "Введите действительную часть: ";
+	os >> obj._R;
+	cout << "Введите мнимую часть: ";
+	os >> obj._Im;
+	return os;
+}
 int main()
 {
 	setlocale(LC_ALL, "rus");
@@ -131,8 +142,11 @@ int main()
 	num3.print();
 	if (num1 == num2) cout << "число 1 равно числу 2" << endl;
 	if (num1 != num2) cout << "число 1 не равно числу 2" << endl;
-	//cout << num1;
+	cout << "Число 1 = " << num1;
 	min = Complex<int>::comp(num1,num2);
 	cout << "Число " << min << " больше по модулю" << endl;
+	cin >> num3;
+	cout << "Вы ввели:" << endl;
+	cout << num3;
     return 0;
 }
