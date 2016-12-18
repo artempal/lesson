@@ -14,7 +14,6 @@ class Stack
 {
 private:
 	T *stackPtr;                      // указатель на стек
-	T *oldPtr;
 	int size;                   // максимальное количество элементов в стеке
 	int top;                          // номер текущего элемента стека
 public:
@@ -36,18 +35,6 @@ public:
 
 // конструктор —тека
 
-template <typename T>
-
-Stack<T>::resizeStack(int new_size)
-{
-	oldPtr = new T[size];
-	for (int ix = 0; ix < size; ix++)
-		oldPtr[ix] = stackPtr.getPtr()[ix];
-	stackPtr = new T[new_size];
-	for (int ix = 0; ix < size; ix++)
-		stackPtr[ix] = oldPtr.getPtr()[ix];
-	size = new_size;
-}
 
 template <typename T>
 Stack<T>::Stack(int maxSize) :
@@ -135,6 +122,20 @@ inline int Stack<T>::getTop() const
 	return top;
 }
 
+//изменение размеров стека
+template <typename T>
+inline void Stack<T>::resizeStack(int new_size)
+{
+	T *oldPtr = new T[size];
+	for (int ix = 0; ix < size; ix++)
+		oldPtr[ix] = stackPtr[ix];
+	delete stackPtr;
+	stackPtr = new T[new_size];
+	for (int ix = 0; ix < size; ix++)
+		stackPtr[ix] = oldPtr[ix];
+	size = new_size;
+}
+
 using namespace std;
 
 
@@ -170,5 +171,14 @@ int main()
 
 	stackSymbol.resizeStack(10);
 	stackSymbol.printStack();
+	ct = 0;
+	while (ct++ < 6)
+	{
+		cin >> ch;
+		stackSymbol.push(ch); // помещаем элементы в стек
+	}
+	stackSymbol.printStack();
+
+
 	return 0;
 }
