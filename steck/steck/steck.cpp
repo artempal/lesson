@@ -13,11 +13,13 @@ template <typename T>
 class Stack
 {
 private:
+	const int std_size = 5; //стандартный размер стека
 	T *stackPtr;                      // указатель на стек
 	int size;                   // максимальное количество элементов в стеке
 	int top;                          // номер текущего элемента стека
+	int empty = std_size; //количество пустых элементов
 public:
-	Stack(int = 10);                  // по умолчанию размер стека равен 10 элементам
+	Stack(int = std_size);                  // по умолчанию размер стека равен 10 элементам
 	Stack(const Stack<T> &);          // конструктор копирования
 	~Stack();                         // деструктор
 
@@ -28,7 +30,8 @@ public:
 	inline int getStackSize() const;  // получить размер стека
 	inline T *getPtr() const;         // получить указатель на стек
 	inline int getTop() const;        // получить номер текущего элемента в стеке
-	inline void resizeStack(int size);        
+	inline void resizeStack(int size);
+	inline void debugging();
 };
 
 // реализация методов шаблона класса STack
@@ -69,7 +72,9 @@ inline void Stack<T>::push(const T &value)
 {
 	// проверяем размер стека
 	assert(top < size); // номер текущего элемента должен быть меньше размера стека
-
+	empty--;
+	if ((size - empty) == size)
+		resizeStack((int)size*1.5);
 	stackPtr[top++] = value; // помещаем элемент в стек
 }
 
@@ -79,7 +84,9 @@ inline T Stack<T>::pop()
 {
 	// проверяем размер стека
 	assert(top > 0); // номер текущего элемента должен быть больше 0
-
+	empty++;
+	if((size/empty)<1.5)
+		resizeStack((int)size/1.5);
 	return stackPtr[--top]; // удаляем элемент из стека
 }
 
@@ -126,16 +133,39 @@ inline int Stack<T>::getTop() const
 template <typename T>
 inline void Stack<T>::resizeStack(int new_size)
 {
-	T *oldPtr = new T[size];
-	for (int ix = 0; ix < size; ix++)
-		oldPtr[ix] = stackPtr[ix];
-	delete stackPtr;
-	stackPtr = new T[new_size];
-	for (int ix = 0; ix < size; ix++)
-		stackPtr[ix] = oldPtr[ix];
+	int delta;
+	delta = new_size - size;
+	empty += delta;
+	if (delta > 0) 
+	{
+		T *oldPtr = new T[size];
+		for (int ix = 0; ix < size; ix++)
+			oldPtr[ix] = stackPtr[ix];
+		delete stackPtr;
+		stackPtr = new T[new_size];
+		for (int ix = 0; ix < size; ix++)
+			stackPtr[ix] = oldPtr[ix];
+	}
+	else
+	{
+		T *oldPtr = new T[size];
+		for (int ix = 0; ix < size; ix++)
+			oldPtr[ix] = stackPtr[ix];
+		delete stackPtr;
+		stackPtr = new T[new_size];
+		for (int ix = 0; ix < new_size; ix++)
+			stackPtr[ix] = oldPtr[ix];
+	}
 	size = new_size;
 }
-
+template <typename T>
+inline void Stack<T>::debugging()
+{
+	cout << "-------------------------" << endl << endl;
+	cout << "Размер стека " << size << endl;
+	cout << "Количество элементов " << size - empty << endl;
+	cout << "-------------------------" << endl << endl;
+}
 using namespace std;
 
 
@@ -146,6 +176,8 @@ int main()
 	Stack<char> stackSymbol(5);
 	int ct = 0;
 	char ch;
+
+	cout << "Введите 5 первых символов" << endl;
 
 	while (ct++ < 5)
 	{
@@ -168,17 +200,32 @@ int main()
 	newStack.printStack();
 
 	cout << "Второй в очереди элемент: " << newStack.Peek(2) << endl;
-
-	stackSymbol.resizeStack(10);
 	stackSymbol.printStack();
+
+	//stackSymbol.resizeStack(10);
+	int colvo;
+	cout << "Сколько еще элементов введем?" << endl;
+	cin >> colvo;
+	
 	ct = 0;
-	while (ct++ < 6)
+	while (ct++ < colvo)
 	{
 		cin >> ch;
 		stackSymbol.push(ch); // помещаем элементы в стек
+		stackSymbol.debugging();
 	}
 	stackSymbol.printStack();
 
+	cout << "Сколько элементов удалим?" << endl;
+	cin >> colvo;
+
+	ct = 0;
+	while (ct++ < colvo)
+	{
+		stackSymbol.pop(); 
+	}
+	stackSymbol.printStack();
+	stackSymbol.debugging();
 
 	return 0;
 }
