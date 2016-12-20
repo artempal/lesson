@@ -52,6 +52,8 @@ public:
 	void Edit(const int N); 
 	void Search(string key);
 	void OutputToFile();
+	void Clean();
+	void pop(int N);
 	int Cout()
 	{
 		return size;
@@ -125,6 +127,17 @@ void List::OutputToFile()
 		cout << "Не могу создать файл" << endl;
 }
 
+void List::Clean()
+{
+	while (Head != NULL)
+	{
+		BookCard *temp = Head->Next;
+		delete Head;
+		Head = temp;
+	}
+}
+
+
 void List::Show() 
 {
 	BookCard *temp = Head;
@@ -140,7 +153,6 @@ void List::Show()
 void List::Edit(int N) 
 {
 	BookCard *temp = Head; 
-	int t;
 	char *newtitle = new char[255];
 	char *newauthor = new char[255];
 	if ((Head != NULL) && ((N - 1)<size)) 
@@ -148,16 +160,10 @@ void List::Edit(int N)
 		for (int i = 0; i < (N - 1); i++) temp = temp->Next;
 		cout << temp->title << " ";
 		cout << temp->author << endl;
-
-		cout << "Изменить эту карту? \n"; cin >> t;
-		if (t = 1)
-		{
 		cout << "Новое название: "; cin >> newtitle;
 		cout << "Новый автор: "; cin >> newauthor;
-
+		strcpy_s(temp->author, 255, newauthor);
 		strcpy_s(temp->title , 255, newtitle);
-		strcpy_s(temp->author , 255, newauthor);
-		}
 		
 	}
 	delete newauthor;
@@ -170,6 +176,7 @@ public:
 	List list;
 	void CreateList()
 	{
+		list.Clean();
 		int N;
 		cout << "Введите количество библиотечных карточек" << endl;
 		cin >> N;
@@ -184,6 +191,7 @@ public:
 	}
 	void Open()
 	{
+		list.Clean();
 		char* titel = new char[255];
 		char* author = new char [255];
 		ifstream fin("file.txt");
@@ -194,6 +202,8 @@ public:
 			card.InputFromFile(card, titel, author);
 			list.Add(card);
 		}
+		cout << "Библиотека открыта!" << endl;
+		list.Show();
 		delete titel;
 		delete author;
 	}
@@ -215,8 +225,6 @@ public:
 	void Save()
 	{
 		list.OutputToFile();
-		cout << "Библиотека открыта!" << endl;
-		list.Show();
 	}
 	void Print()
 	{
