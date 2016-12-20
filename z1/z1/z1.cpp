@@ -4,17 +4,16 @@
 #include <string>
 #include <cstring>
 #include <conio.h>
+#include <fstream>
 using namespace std;
 
 class BookCard
 {
 public:
-	unsigned int id;
 	char *title;
 	char *author;
 	BookCard()
 	{
-		id = (unsigned int) this;
 		title = new char[255];
 		author = new char[255];
 	}
@@ -23,35 +22,37 @@ public:
 		delete title;
 		delete author;
 	}
-	void Input(BookCard&card);//Функция ввода данных в класс
-	BookCard *Next;//Адрес на следующий элемент
+	void Input(BookCard&card);
+	void BookCard::InputFromFile(BookCard &card, char * mytitle, char * myauthor);
+	BookCard *Next;
 };
 
-class List//Класс Список
+class List
 {
-	BookCard *Head;//Указатель на начало списка
+	BookCard *Head;
 
 	int size;
 public:
-	List()//Конструктор с инициализацией указателя пустым значением
+	List()
 	{
 		Head = NULL;
 		size = 0;
 	}
-	~List()//деструктор
+	~List()
 	{
-		while (Head != NULL)//Пока по адресу не пусто 
+		while (Head != NULL)
 		{
-			BookCard *temp = Head->Next;//Временная переменная для хранения адреса следующего элемента
-			delete Head;//Освобождаем адрес обозначающий начало
-			Head = temp;//Меняем адрес на следующий
+			BookCard *temp = Head->Next;
+			delete Head;
+			Head = temp;
 		}
 	}
-	void Add(const BookCard&card);//Функция для добавления значений в список
-	void Show();//Функция для отображения списка на экране
-	void Pop(const int N); //функция извлечения элемента
+	void Add(const BookCard&card);
+	void Show();
+	void Edit(const int N); 
 	void Search(string key);
-	int Cout()//функция-счетчик
+	void OutputToFile();
+	int Cout()
 	{
 		return size;
 	};
@@ -64,19 +65,21 @@ void BookCard::Input(BookCard&card)
 	cout << endl;
 }
 
-
-void List::Add(const BookCard&card)//Функция добавления элементов в список
+void BookCard::InputFromFile(BookCard &card, char * mytitle, char * myauthor)
 {
-	size++; // При каждом вызове функции добавления увеличивается счетчик элементов
-	BookCard *temp = new BookCard;//При каждом вызове выделяется память
-	temp->Next = Head;//Указываем, что адрес следующего элемента это начало списка
-	Head = temp;//Указываем, что адрес следующего элемента это начало списка
+	strcpy_s(title , 255,  mytitle);
+	strcpy_s(author, 255, myauthor);
+}
 
-				//Копирование содержимого параметра card в только что созданную переменную
 
+void List::Add(const BookCard&card)
+{
+	size++; 
+	BookCard *temp = new BookCard;
+	temp->Next = Head;
+	Head = temp;
 	strcpy_s(temp->title, 255, card.title);
 	strcpy_s(temp->author, 255, card.author);
-
 	Head = temp; //Смена адреса начала списка
 }
 
@@ -88,7 +91,6 @@ void List::Search(string key1)
 		if ((key1 == temp->author) || (key1 == temp->title))
 		{
 			cout << "Библиотечная карта найдена" <<endl;
-			cout << temp->id << ": ";
 			cout << temp->title << " ";
 			cout << temp->author << endl;
 			break;
@@ -103,6 +105,26 @@ void List::Search(string key1)
 
 }
 
+void List::OutputToFile()
+{
+	ofstream fout("file.txt");
+	if (fout)
+	{
+		BookCard *temp = Head; 
+
+		while (temp != NULL) 
+		{
+			fout << temp->title << endl;
+			fout << temp->author << endl;
+			temp = temp->Next;
+		}
+		fout.close();
+		cout << "Успешно" << endl;
+	}
+	else
+		cout << "Не могу создать файл" << endl;
+}
+
 void List::Show() 
 {
 	BookCard *temp = Head;
@@ -115,18 +137,17 @@ void List::Show()
 	cout << endl;
 }
 
-void List::Pop(int N) //параметр номер изменяемого элемента
+void List::Edit(int N) 
 {
-	BookCard *temp = Head; //Обращаемся к началу списка
+	BookCard *temp = Head; 
 	int t;
 	char *newtitle = new char[255];
 	char *newauthor = new char[255];
-	if ((Head != NULL) && ((N - 1)<size)) //Делаем проверку на то что список не пуст и N не превышает число его элементов
+	if ((Head != NULL) && ((N - 1)<size)) 
 	{
-		for (int i = 0; i < (N - 1); i++) temp = temp->Next;//Меняем адрес N раз
+		for (int i = 0; i < (N - 1); i++) temp = temp->Next;
 		cout << temp->title << " ";
 		cout << temp->author << endl;
-		//Выводим N элемент списка на экран
 
 		cout << "Изменить эту карту? \n"; cin >> t;
 		if (t = 1)
@@ -143,30 +164,108 @@ void List::Pop(int N) //параметр номер изменяемого эл�
 	delete newtitle;
 	cout << endl;
 }
+class mainClass {
+public:
+	BookCard card;
+	List list;
+	void CreateList()
+	{
+		int N;
+		cout << "Введите количество библиотечных карточек" << endl;
+		cin >> N;
+		cin.ignore();
+		for (int i = 0; i < N; i++)
+		{
+			card.Input(card);
+			list.Add(card);
+		}
+		cout << endl;
+		list.Show();
+	}
+	void Open()
+	{
+		char* titel = new char[255];
+		char* author = new char [255];
+		ifstream fin("file.txt");
+		while (!fin.eof())
+		{
+			fin >> titel;
+			fin >> author;
+			card.InputFromFile(card, titel, author);
+			list.Add(card);
+		}
+		delete titel;
+		delete author;
+	}
+	void Search()
+	{
+		string key;
+		cout << "Введите название книги или автора\n";
+		cin >> key;
+		list.Search(key);
+	}
+	void Edit()
+	{
+		int N;
+		cout << "Введите номер карты\n";
+		cin >> N; 
+		list.Edit(N);
+		list.Show();
+	}
+	void Save()
+	{
+		list.OutputToFile();
+		cout << "Библиотека открыта!" << endl;
+		list.Show();
+	}
+	void Print()
+	{
+		list.Show();
+	}
+};
 void main()
 {
 	setlocale(LC_ALL, "rus");
-	BookCard card;
-	int N; 
-	List list;
-	cout << "Введите количество библиотечных карточек" << endl;
-	cin >> N;
-	string key;
-	cin.ignore();//массив типа char всегда содержит символ NULL, который нужно проигнорировать
-	for (int i = 0; i < N; i++)
+	mainClass mclass;
+	int act;
+	while (1)
 	{
-		card.Input(card);
-		list.Add(card);
+		cout << "Что сделаем?" << endl;
+		cout << "------------" << endl;
+		cout << "1.Создать новую библиотеку" << endl;
+		cout << "2.Открыть библиотеку из файла" << endl;
+		cout << "3.Сохранить библиотеку в файл" << endl;
+		cout << "4.Найти в библиотеке по автору или названию" << endl;
+		cout << "5.Изменить карточку" << endl;
+		cout << "6.Вывести все книги библиотеки" << endl;
+		cout << "0.Выход" << endl;
+		cout << "------------" << endl << endl;
+		cin >> act;
+		switch (act)
+		{
+		case 0:
+			return;
+		case 1:
+			mclass.CreateList();
+			break;
+		case 2:
+			mclass.Open();
+			break;
+		case 3:
+			mclass.Save();
+			break;
+		case 4:
+			mclass.Search();
+			break;
+		case 5:
+			mclass.Edit();
+			break;
+		case 6:
+			mclass.Print();
+			break;
+		default:
+			return;
+		}
 	}
-	cout << endl;
-	list.Show();
-
-	cout << "Введите название книги или автора\n";
-	cin >> key; //поиск по ключу
-	list.Search(key);
-
-	cout << "Введите номер карты\n";
-	cin >> N; //поиск по номеру
-	list.Pop(N);
-	list.Show();
+	
 }
