@@ -168,22 +168,40 @@ inline void Stack<T>::debugging()
 }
 using namespace std;
 
+class input_error : public exception{
+public:
+	input_error(const char* desc)	: exception(desc) {}
+};
 
 
 int main()
 {
 	setlocale(LC_ALL, "Russian");
-	Stack<char> stackSymbol(5);
+	Stack<int> stackSymbol(5);
 	int ct = 0;
-	char ch;
+	int ch;
 
-	cout << "Введите 5 первых символов" << endl;
+	cout << "Введите 5 первых цифр" << endl;
+	
+		while (ct++ < 5)
+		{
+			try 
+			{
+				cin >> ch;
+				if (!cin)
+				{
+					throw input_error("Неправильный тип");
+				}
+			}
+			catch (input_error& err)
+			{
+				cerr << "Ошибка ввода:\n\t" << err.what() << endl;
+				return 0;
+			}
+				stackSymbol.push(ch); // помещаем элементы в стек
+		}
+	
 
-	while (ct++ < 5)
-	{
-		cin >> ch;
-		stackSymbol.push(ch); // помещаем элементы в стек
-	}
 
 	cout << endl;
 
@@ -194,7 +212,7 @@ int main()
 
 	stackSymbol.printStack(); // печать стека
 
-	Stack<char> newStack(stackSymbol);
+	Stack<int> newStack(stackSymbol);
 
 	cout << "\n\nСработал конструктор копирования!\n";
 	newStack.printStack();
@@ -210,7 +228,19 @@ int main()
 	ct = 0;
 	while (ct++ < colvo)
 	{
-		cin >> ch;
+		try
+		{
+			cin >> ch;
+			if (!cin)
+			{
+				throw input_error("Неправильный тип");
+			}
+		}
+		catch (input_error& err)
+		{
+			cerr << "Ошибка ввода:\n\t" << err.what() << endl;
+			return 0;
+		}
 		stackSymbol.push(ch); // помещаем элементы в стек
 		stackSymbol.debugging();
 	}
