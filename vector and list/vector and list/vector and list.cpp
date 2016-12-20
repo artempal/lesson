@@ -83,7 +83,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	while (i != L.end())
 	{
 		i->print();
-		*i++;
+		i++;
 	}
 	cout << "¬ведите id книги, которую нужно найти" << endl;
 	long int key;
@@ -97,6 +97,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			i->print();
 			break;
 		}
+		i++;
 	}
 	return 0;
 }
