@@ -36,23 +36,19 @@ public:
 	int* days_to_arr(int days) //перевод дней в массив
 	{
 		int D[3];
-		int sum_day_y = 0;
-		int sum_day_m = 0;
 		int y = 1;
 		int m = 1;
 		int d = 1;
-		while ((sum_day_y + (bissextile(y+1) ? 366 : 365)) <= days)
+		while ((bissextile(y - 1) ? 366 : 365) <= days)
 		{
-			sum_day_y += bissextile(y) ? 366 : 365;
+			days -= bissextile(y) ? 366 : 365;
 			y++;
 		}
-		days -= sum_day_y;
-		while (sum_day_m + days_in_month(m + 1, y) <= days) 
+		while (days_in_month(m - 1, y) <= days) 
 		{
-			sum_day_m += days_in_month(m, y);
+			days -= days_in_month(m, y);
 			m++;
 		}
-		days -= sum_day_m;
 		d += days;
 		D[0] = y;
 		D[1] = m;
@@ -85,7 +81,7 @@ int main()
 {
 	Date date(2017, 1, 19, 2018, 10, 19);
 	cout << date.dist() << endl;
-	date.minus(3);
+	date.minus(5000);
     return 0;
 }
 
